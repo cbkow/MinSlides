@@ -1,0 +1,639 @@
+/* =========================================
+   FONT
+   ========================================= */
+@font-face {
+  font-family: 'Aspekta Variable';
+  src: url('fonts/AspektaVF.woff2') format('woff2');
+  font-weight: 100 700;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font: 'Aspekta Variable', sans-serif;
+
+  /* ── Accent ── swap this one variable per slideshow */
+  --color-accent: rgb(0, 120, 212);
+
+  /* ── Palette ── matches parent site */
+  --color-bg:    #000000;
+  --color-fg:    rgba(255, 249, 240, 0.85);
+  --color-muted: rgba(255, 249, 240, 0.4);
+  --color-dim:   rgba(255, 249, 240, 0.25);
+  --color-border: rgba(255, 249, 240, 0.1);
+
+  /* ── Slide backgrounds ── dark variations */
+  --bg-dark:   #000000;
+  --bg-tint:   #0a0a0a;
+  --bg-shift:  #0d0d0d;
+  --bg-lift:   #111111;
+
+  --slide-width: 100vw;
+  --slide-height: 100vh;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  background: rgba(255, 249, 240, 0.3);
+}
+
+/* =========================================
+   SCROLLBAR
+   ========================================= */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 249, 240, 0.25) #000000;
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #000000; }
+::-webkit-scrollbar-thumb {
+  background: rgba(3, 2, 1, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 249, 240, 0.4);
+}
+
+/* =========================================
+   SCROLL-SNAP CONTAINER
+   ========================================= */
+.deck {
+  width: var(--slide-width);
+  height: var(--slide-height);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.deck::-webkit-scrollbar { display: none; }
+
+/* =========================================
+   INDIVIDUAL SLIDE
+   ========================================= */
+.slide {
+  width: var(--slide-width);
+  height: var(--slide-height);
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.slide--tint  { background: var(--bg-tint); }
+.slide--shift { background: var(--bg-shift); }
+.slide--lift  { background: var(--bg-lift); }
+
+/* =========================================
+   BACKGROUND LAYER
+   SVG or image behind slide content.
+
+   .slide-bg            → contain (default)
+                           shows full SVG/image, letterboxes if needed
+   .slide-bg--cover     → cover
+                           fills viewport, crops edges — use for photos
+   ========================================= */
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide-bg--cover {
+  object-fit: cover;
+}
+
+.slide-bg-inline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.slide-bg-inline svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================================
+   CONTENT LAYER
+   ========================================= */
+.slide-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  width: 100%;
+  padding: 4rem;
+}
+
+.img-fit {
+  max-width: 100%;
+  max-height: 100vh;
+  height: auto;
+  object-fit: contain;
+}
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+.slide-label {
+  font-size: 0.83rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
+}
+
+.slide-title {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.slide-body {
+  font-size: clamp(0.83rem, 1.2vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  line-height: 1.6;
+  color: rgba(255, 249, 240, 0.6);
+  max-width: 520px;
+}
+
+/* =========================================
+   VIDEO PLAYER CONTAINER
+   ========================================= */
+.video-mount {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.video-mount--positioned {
+  position: absolute;
+}
+
+.video-mount .video-js {
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================================
+   VIDEO.JS SKIN
+   Full player theming to match parent site.
+   Accent color drives progress bar via
+   color-mix() — changes with --color-accent.
+   ========================================= */
+
+/* Base */
+.video-mount .video-js {
+  background: #000;
+  font-family: inherit;
+}
+
+/* Fix sub-pixel gap on fluid aspect ratio */
+.video-mount .video-js.vjs-fluid,
+.video-mount .video-js.vjs-16-9 {
+  padding-top: 56.3% !important;
+}
+
+/* Control bar */
+.video-mount .vjs-control-bar {
+  background: rgba(4, 4, 4, 0.7);
+}
+
+/* All icons, buttons, text — body text color */
+.video-mount .vjs-button,
+.video-mount .vjs-control,
+.video-mount .vjs-time-control,
+.video-mount .vjs-current-time,
+.video-mount .vjs-duration,
+.video-mount .vjs-time-divider,
+.video-mount .vjs-remaining-time {
+  color: rgba(255, 249, 240, 0.85);
+}
+
+/* Button hover */
+.video-mount .vjs-button:hover {
+  color: rgba(255, 249, 240, 1);
+  background: rgba(255, 249, 240, 0.1);
+}
+
+/* Big play button */
+.video-mount .vjs-big-play-button {
+  background-color: rgba(255, 249, 240, 0.1);
+  border: 1px solid rgba(255, 249, 240, 0.3);
+  border-radius: 0;
+  font-size: 2em;
+  line-height: 1.5em;
+  height: 1.5em;
+  width: 2em;
+}
+.video-mount .vjs-big-play-button:hover {
+  background-color: rgba(255, 249, 240, 0.2);
+}
+
+/* Progress bar — accent-tinted track */
+.video-mount .vjs-progress-holder {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+.video-mount .vjs-progress-control .vjs-slider {
+  background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+/* Play progress — body text color */
+.video-mount .vjs-play-progress,
+.video-mount .vjs-progress-control .vjs-play-progress {
+  background: rgba(255, 249, 240, 0.85);
+}
+
+/* Volume level */
+.video-mount .vjs-volume-level {
+  background: rgba(255, 249, 240, 0.85);
+}
+
+/* Buffer bar */
+.video-mount .vjs-load-progress,
+.video-mount .vjs-load-progress div {
+  background: rgba(255, 249, 240, 0.2);
+}
+
+/* Time tooltip on progress */
+.video-mount .vjs-progress-control .vjs-time-tooltip {
+  background-color: #0a0a0a;
+  color: rgba(255, 249, 240, 0.85);
+}
+
+/* Mouse hover tooltip — inverted */
+.video-mount .vjs-progress-control .vjs-mouse-display .vjs-time-tooltip {
+  background-color: rgba(255, 249, 240, 0.85);
+  color: #0a0a0a;
+}
+
+/* Sprite thumbnail tooltip sizing */
+.video-mount[data-thumb-sprite] .vjs-mouse-display .vjs-time-tooltip {
+  width: 160px !important;
+  height: 90px !important;
+}
+
+/* =========================================
+   CUSTOM POSTER OVERLAY
+   ========================================= */
+.video-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.video-poster.hidden {
+  display: none;
+}
+
+.video-poster-play {
+  background: rgba(4, 4, 4, 0.5);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 249, 240, 0.85);
+  width: 3em;
+  height: 2em;
+  font-size: 1.5rem;
+  padding: 0.3em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-poster-play:hover {
+  background: rgba(4, 4, 4, 0.9);
+}
+.video-poster-play svg {
+  width: 60%;
+  height: 60%;
+}
+
+/* Hide default big-play when custom poster is present */
+.video-mount:has(.video-poster) .vjs-big-play-button {
+  display: none;
+}
+
+/* =========================================
+   QUALITY SELECTOR
+   ========================================= */
+.video-mount .vjs-quality-selector .vjs-icon-placeholder::before {
+  content: '\f114';
+  font-family: 'VideoJS';
+}
+.video-mount .vjs-quality-selector .vjs-menu {
+  width: 6em;
+}
+.video-mount .vjs-quality-selector .vjs-menu-item {
+  text-transform: none;
+  font-size: 0.9em;
+}
+.video-mount .vjs-quality-selector .vjs-menu-item.vjs-selected {
+  background-color: rgba(255, 249, 240, 0.2);
+}
+
+/* =========================================
+   DECK CHROME
+   Fixed UI: logo, title, page counter.
+   Always visible over all slides.
+   ========================================= */
+.deck-chrome {
+  position: fixed;
+  z-index: 100;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.deck-title {
+  top: 2rem;
+  left: 2rem;
+}
+
+.deck-logo {
+  top: 2rem;
+  right: 2rem;
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+.deck-logo img {
+  height: 1.25rem;
+  width: auto;
+  opacity: 0.4;
+}
+
+.deck-counter {
+  bottom: 2rem;
+  right: 2rem;
+}
+
+/* =========================================
+   SLIDE INDICATOR
+   ========================================= */
+.slide-indicator {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slide-indicator__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  padding: 0;
+}
+
+.slide-indicator__dot.is-active {
+  background: var(--color-fg);
+  transform: scale(1.4);
+}
+
+/* =========================================
+   NAV HINT
+   ========================================= */
+.nav-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: var(--color-muted);
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.nav-hint.is-hidden { opacity: 0; pointer-events: none; }
+
+.nav-hint kbd {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border: 1px solid var(--color-dim);
+  border-radius: 3px;
+  font-family: inherit;
+  margin: 0 0.15em;
+}
+
+/* =========================================
+   NAV ARROWS
+   ========================================= */
+.nav-arrow {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: none;
+  border: 1px solid var(--color-dim);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.nav-arrow:hover {
+  color: var(--color-fg);
+  border-color: var(--color-fg);
+}
+.nav-arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+.nav-arrow.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-arrow.is-hidden-arrow {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-arrow--up {
+  top: 1.5rem;
+}
+.nav-arrow--down {
+  bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .nav-arrow--up {
+    top: 4rem;
+  }
+}
+
+/* =========================================
+   VIDEO GALLERY
+   ========================================= */
+.video-gallery {
+  width: 100%;
+  max-width: 960px;
+}
+
+.video-gallery-player {
+  margin-bottom: 0.75rem;
+}
+
+.video-gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+.video-gallery-thumbs--2 { grid-template-columns: repeat(2, 1fr); }
+.video-gallery-thumbs--3 { grid-template-columns: repeat(3, 1fr); }
+.video-gallery-thumbs--4 { grid-template-columns: repeat(4, 1fr); }
+.video-gallery-thumbs--5 { grid-template-columns: repeat(5, 1fr); }
+
+.video-gallery-thumb {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+.video-gallery-thumb:hover {
+  opacity: 0.9;
+}
+.video-gallery-thumb.active {
+  opacity: 1;
+}
+
+.video-gallery-thumb-img {
+  position: relative;
+}
+.video-gallery-thumb-img img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.video-gallery-thumb-play,
+.video-gallery-thumb-active {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(4, 4, 4, 0.5);
+  border-radius: 5px;
+  color: rgba(255, 249, 240, 0.85);
+  width: 2.4em;
+  height: 1.8em;
+  padding: 0.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: background 0.2s ease;
+}
+.video-gallery-thumb:hover .video-gallery-thumb-play,
+.video-gallery-thumb:hover .video-gallery-thumb-active {
+  background: rgba(4, 4, 4, 0.9);
+}
+
+.video-gallery-thumb-active {
+  display: none;
+}
+.video-gallery-thumb.active .video-gallery-thumb-play {
+  display: none;
+}
+.video-gallery-thumb.active .video-gallery-thumb-active {
+  display: flex;
+}
+
+.video-gallery-thumb-caption {
+  display: block;
+  padding: 0.4rem 0;
+  color: rgba(255, 249, 240, 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.video-gallery-thumb.active .video-gallery-thumb-caption {
+  color: rgba(255, 249, 240, 0.85);
+}
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
