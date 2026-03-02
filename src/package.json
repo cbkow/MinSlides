@@ -4,9 +4,8 @@
   "private": true,
   "description": "Password-protected slideshow with scroll-snap and video.js",
   "scripts": {
-    "protect": "npx staticrypt slideshow.html -d dist -t password_template.html --short --template-color-primary \"rgb(0, 120, 212)\" --template-title \"Presentation\" --template-instructions \"Enter the password to view this presentation.\" --template-button-label \"Open\" --remember 30",
-    "build": "npm run protect",
-    "build:secure": "bash secure_build.sh"
+    "build": "node build.js",
+    "build:secure": "node secure_build.js"
   },
   "devDependencies": {
     "staticrypt": "^4.0.0"
