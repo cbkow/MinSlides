@@ -4,7 +4,7 @@
 @font-face {
   font-family: 'Aspekta Variable';
   src: url('fonts/AspektaVF.woff2') format('woff2');
-  font-weight: 100 900;
+  font-weight: 100 700;
   font-display: swap;
 }
 
@@ -153,7 +153,7 @@ html {
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-muted);
   margin-bottom: 1.5rem;
 }
 
@@ -161,6 +161,8 @@ html {
   font-size: clamp(2.5rem, 6vw, 5.5rem);
   font-weight: 700;
   line-height: 1.1;
+  letter-spacing: 0.02em;
+  font-weight: 300;
   margin-bottom: 1rem;
   text-transform: uppercase;
 }
@@ -428,7 +430,7 @@ html {
 }
 
 .slide-indicator__dot.is-active {
-  background: var(--color-accent);
+  background: var(--color-fg);
   transform: scale(1.4);
 }
 
@@ -458,6 +460,57 @@ html {
   border-radius: 3px;
   font-family: inherit;
   margin: 0 0.15em;
+}
+
+/* =========================================
+   NAV ARROWS
+   ========================================= */
+.nav-arrow {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: none;
+  border: 1px solid var(--color-dim);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.nav-arrow:hover {
+  color: var(--color-fg);
+  border-color: var(--color-fg);
+}
+.nav-arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+.nav-arrow.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-arrow.is-hidden-arrow {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-arrow--up {
+  top: 1.5rem;
+}
+.nav-arrow--down {
+  bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .nav-arrow--up {
+    top: 4rem;
+  }
 }
 
 /* =========================================

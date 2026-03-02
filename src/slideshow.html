@@ -174,6 +174,14 @@
     <kbd>↑</kbd> <kbd>↓</kbd> <span style="margin-left:0.5em;">or scroll to navigate</span>
   </div>
 
+  <!-- NAV ARROWS (appear after hint dismisses) -->
+  <button class="nav-arrow nav-arrow--up is-hidden" id="navUp" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg>
+  </button>
+  <button class="nav-arrow nav-arrow--down is-hidden" id="navDown" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+  </button>
+
   <script>
     // ==========================================
     // SLIDESHOW ENGINE
@@ -183,8 +191,14 @@
     const slides = deck.querySelectorAll('.slide');
     const indicator = document.getElementById('indicator');
     const navHint = document.getElementById('navHint');
+    const navUp = document.getElementById('navUp');
+    const navDown = document.getElementById('navDown');
     const counter = document.getElementById('counter');
     let currentSlide = 0;
+
+    // --- Nav arrow clicks ---
+    navUp.addEventListener('click', () => goToSlide(currentSlide - 1));
+    navDown.addEventListener('click', () => goToSlide(currentSlide + 1));
 
     // --- Build indicator dots ---
     slides.forEach((_, i) => {
@@ -224,6 +238,19 @@
         dot.classList.toggle('is-active', i === activeIndex);
       });
       counter.textContent = `${activeIndex + 1} / ${slides.length}`;
+      // hide arrows at first/last slide
+      navUp.classList.toggle('is-hidden-arrow', activeIndex === 0);
+      navDown.classList.toggle('is-hidden-arrow', activeIndex === slides.length - 1);
+    }
+
+    // --- Show nav arrows + hide hint ---
+    function showNavArrows() {
+      if (hasNavigated) return;
+      hasNavigated = true;
+      navHint.classList.add('is-hidden');
+      navUp.classList.remove('is-hidden');
+      navDown.classList.remove('is-hidden');
+      updateIndicator(currentSlide);
     }
 
     // --- Keyboard navigation ---
@@ -237,17 +264,11 @@
         goToSlide(currentSlide - 1);
       }
 
-      if (!hasNavigated) {
-        hasNavigated = true;
-        navHint.classList.add('is-hidden');
-      }
+      showNavArrows();
     });
 
     deck.addEventListener('scroll', () => {
-      if (!hasNavigated) {
-        hasNavigated = true;
-        navHint.classList.add('is-hidden');
-      }
+      showNavArrows();
     }, { once: true });
 
     // ==========================================
