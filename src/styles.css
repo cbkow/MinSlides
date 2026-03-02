@@ -43,6 +43,14 @@ html {
   font-family: var(--font);
 }
 
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 ::selection {
   background: rgba(255, 249, 240, 0.3);
 }
@@ -143,6 +151,13 @@ html {
   max-width: 1200px;
   width: 100%;
   padding: 4rem;
+}
+
+.img-fit {
+  max-width: 100%;
+  max-height: 100vh;
+  height: auto;
+  object-fit: contain;
 }
 
 /* =========================================
@@ -511,6 +526,101 @@ html {
   .nav-arrow--up {
     top: 4rem;
   }
+}
+
+/* =========================================
+   VIDEO GALLERY
+   ========================================= */
+.video-gallery {
+  width: 100%;
+  max-width: 960px;
+}
+
+.video-gallery-player {
+  margin-bottom: 0.75rem;
+}
+
+.video-gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.video-gallery-thumb {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+.video-gallery-thumb:hover {
+  opacity: 0.9;
+}
+.video-gallery-thumb.active {
+  opacity: 1;
+}
+
+.video-gallery-thumb-img {
+  position: relative;
+}
+.video-gallery-thumb-img img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.video-gallery-thumb-play,
+.video-gallery-thumb-active {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(4, 4, 4, 0.5);
+  border-radius: 5px;
+  color: rgba(255, 249, 240, 0.85);
+  width: 2.4em;
+  height: 1.8em;
+  padding: 0.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: background 0.2s ease;
+}
+.video-gallery-thumb:hover .video-gallery-thumb-play,
+.video-gallery-thumb:hover .video-gallery-thumb-active {
+  background: rgba(4, 4, 4, 0.9);
+}
+
+.video-gallery-thumb-active {
+  display: none;
+}
+.video-gallery-thumb.active .video-gallery-thumb-play {
+  display: none;
+}
+.video-gallery-thumb.active .video-gallery-thumb-active {
+  display: flex;
+}
+
+.video-gallery-thumb-caption {
+  display: block;
+  padding: 0.4rem 0;
+  color: rgba(255, 249, 240, 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.video-gallery-thumb.active .video-gallery-thumb-caption {
+  color: rgba(255, 249, 240, 0.85);
 }
 
 /* =========================================

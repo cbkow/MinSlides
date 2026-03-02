@@ -47,13 +47,10 @@
           Custom poster: add a .video-poster div with a background-image.
           It overlays the player until the user clicks play, then hides.
 
-          Sprite thumbnails: specify each URL independently via data attributes.
+          Sprite thumbnails: provide explicit paths to each file.
             data-thumb-sprite  — URL to the sprite sheet JPG
-            data-thumb-width   — individual thumbnail width (default 160)
-            data-thumb-height  — individual thumbnail height (default 90)
-            data-thumb-columns — thumbnails per row in sprite (default 10)
-            data-thumb-rows    — rows in sprite sheet (default 17)
-            data-thumb-interval — seconds between captures (default 1)
+            data-thumb-config  — URL to the JSON config (width, height, columns, rows, interval)
+            If no config JSON is provided, defaults to 160×90, 10 cols, 17 rows, 1s interval.
 
           For HLS streaming, swap the source to:
             <source src="https://your-cdn.com/manifest.m3u8" type="application/x-mpegURL">
@@ -147,8 +144,88 @@
       </div>
     </section>
 
-    <!-- SLIDE 6 — Closing -->
-    <section class="slide slide--lift" data-slide="5">
+    <!-- SLIDE 6 — Video Gallery -->
+    <section class="slide" data-slide="5">
+      <!--
+        Video Gallery: a main player with a thumbnail strip below.
+        Clicking a thumbnail switches the video source.
+
+        Each thumbnail button needs:
+          data-video-url  — HLS or mp4 URL
+          data-poster     — poster image URL
+          data-caption    — display label
+
+        The first thumbnail should have class="active".
+      -->
+      <div class="slide-content" style="display:flex; flex-direction:column; align-items:center; gap:1.5rem;">
+        <div class="slide-label" style="text-align:center;">Video Gallery</div>
+
+        <div class="video-gallery">
+          <div class="video-gallery-player">
+            <div class="video-mount">
+              <div class="video-poster" style="background-image: url('');">
+                <button class="video-poster-play" aria-label="Play">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+                </button>
+              </div>
+              <video
+                id="player-gallery"
+                class="video-js vjs-fluid"
+                controls
+                preload="auto">
+                <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div class="video-gallery-thumbs">
+            <button class="video-gallery-thumb active"
+              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
+              data-poster=""
+              data-caption="Oceans">
+              <div class="video-gallery-thumb-img">
+                <img src="" alt="Oceans" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Oceans</span>
+            </button>
+
+            <button class="video-gallery-thumb"
+              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
+              data-poster=""
+              data-caption="Sample Two">
+              <div class="video-gallery-thumb-img">
+                <img src="" alt="Sample Two" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Sample Two</span>
+            </button>
+
+            <button class="video-gallery-thumb"
+              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
+              data-poster=""
+              data-caption="Sample Three">
+              <div class="video-gallery-thumb-img">
+                <img src="" alt="Sample Three" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Sample Three</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="slide-body" style="text-align:center;">
+          Replace the URLs and posters with your own videos.
+          Clicking a thumbnail switches the main player.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 — Closing -->
+    <section class="slide slide--lift" data-slide="6">
       <div class="slide-content" style="text-align:center;">
         <h2 class="slide-title" style="font-size:clamp(2rem,5vw,4rem);">
           Fin.
@@ -331,16 +408,27 @@
         }
 
         // --- Sprite thumbnails ---
-        const spriteUrl = mount?.dataset.thumbSprite;
+        const spriteUrl  = mount?.dataset.thumbSprite;
+        const configUrl  = mount?.dataset.thumbConfig;
         if (spriteUrl) {
-          player.spriteThumbnails({
-            url: spriteUrl,
-            width:    parseInt(mount.dataset.thumbWidth)    || 160,
-            height:   parseInt(mount.dataset.thumbHeight)   || 90,
-            columns:  parseInt(mount.dataset.thumbColumns)  || 10,
-            rows:     parseInt(mount.dataset.thumbRows)     || 17,
-            interval: parseInt(mount.dataset.thumbInterval) || 1
-          });
+          const apply = (config) => {
+            player.spriteThumbnails({
+              url:      spriteUrl,
+              width:    config?.width    || 160,
+              height:   config?.height   || 90,
+              columns:  config?.columns  || 10,
+              rows:     config?.rows     || 17,
+              interval: config?.interval || 1
+            });
+          };
+          if (configUrl) {
+            fetch(configUrl)
+              .then(res => res.ok ? res.json() : null)
+              .then(apply)
+              .catch(() => apply(null));
+          } else {
+            apply(null);
+          }
         }
 
         // --- HLS quality selector ---
@@ -517,9 +605,46 @@
     }
 
     // ==========================================
+    // VIDEO GALLERY
+    // Thumbnail strip switches the main player.
+    // ==========================================
+
+    function initGalleries() {
+      document.querySelectorAll('.video-gallery').forEach(gallery => {
+        const playerEl = gallery.querySelector('.video-mount video');
+        if (!playerEl) return;
+
+        const player = videojs.getPlayer(playerEl.id);
+        if (!player) return;
+
+        const poster = gallery.querySelector('.video-poster');
+        const thumbs = gallery.querySelectorAll('.video-gallery-thumb');
+
+        thumbs.forEach(thumb => {
+          thumb.addEventListener('click', () => {
+            const videoUrl = thumb.dataset.videoUrl;
+            const posterUrl = thumb.dataset.poster;
+
+            player.src({ src: videoUrl, type: 'application/x-mpegURL' });
+
+            if (poster) {
+              poster.style.backgroundImage = `url('${posterUrl}')`;
+              poster.classList.remove('hidden');
+            }
+
+            // Don't autoplay — let poster show, user clicks play
+            thumbs.forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+          });
+        });
+      });
+    }
+
+    // ==========================================
     // INIT
     // ==========================================
     initPlayers();
+    initGalleries();
 
     // ==========================================
     // EXAMPLE: Mount a video on an SVG rect
