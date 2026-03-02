@@ -2,6 +2,8 @@
 
 Password-protected slideshow with scroll-snap navigation, Video.js streaming, and optional CDN URL signing. Runs client-side — no backend required.
 
+**[Live Demo](https://cbkow.github.io/MinSlides/)** (password: `test`)
+
 ## Quick Start
 
 ```bash
