@@ -26,10 +26,9 @@
 
       <div class="slide-content">
         <div class="slide-label">Project Title</div>
-        <h1 class="slide-title">Your Designed<br>Slide Deck</h1>
+        <h1 class="slide-title">This is<br>a headline</h1>
         <p class="slide-body">
-          Replace this content with your Illustrator SVGs.
-          Each section is a full-viewport slide with scroll-snap.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut eros sem. Quisque accumsan eros non massa convallis, non euismod dolor tempus. Ut tempor metus id libero finibus, vitae lobortis quam laoreet.
         </p>
       </div>
     </section>
@@ -56,7 +55,7 @@
             <source src="https://your-cdn.com/manifest.m3u8" type="application/x-mpegURL">
         -->
         <div class="video-mount">
-          <div class="video-poster" style="background-image: url('');">
+          <div class="video-poster" style="background-image: url('https://picsum.photos/seed/poster/960/540');">
             <button class="video-poster-play" aria-label="Play">
               <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
             </button>
@@ -84,9 +83,9 @@
         to target elements inside it for video positioning.
         Swap the src to your exported SVG file.
       -->
-      <img class="slide-bg" src="slides/slide-03.svg" alt="">
+      <img class="slide-bg" src="images/threeColumns.svg" alt="" style="opacity:85%;">
 
-      <div class="slide-content" style="text-align:center;">
+      <!-- <div class="slide-content" style="text-align:center;">
         <div class="slide-label">External SVG</div>
         <h2 class="slide-title" style="font-size:clamp(2rem,4vw,3.5rem);">
           SVG Background
@@ -95,7 +94,7 @@
           Illustrator exports loaded via img tag. The SVG scales with
           object-fit: contain — no letterboxing on matching aspect ratios.
         </p>
-      </div>
+      </div> -->
     </section>
 
     <!-- SLIDE 4 — Image background (photo) -->
@@ -105,7 +104,7 @@
         Fills the viewport and crops edges rather than letterboxing.
         Works with any image format — JPG, PNG, WebP, AVIF.
       -->
-      <img class="slide-bg slide-bg--cover" src="slides/photo-bg.jpg" alt="">
+      <img class="slide-bg slide-bg--cover" src="https://picsum.photos/seed/photo-bg/1920/1080" alt="" style="opacity:30%;">
 
       <div class="slide-content" style="text-align:center;">
         <div class="slide-label">Image Background</div>
@@ -163,7 +162,7 @@
         <div class="video-gallery">
           <div class="video-gallery-player">
             <div class="video-mount">
-              <div class="video-poster" style="background-image: url('');">
+              <div class="video-poster" style="background-image: url('https://picsum.photos/seed/gallery1/960/540');">
                 <button class="video-poster-play" aria-label="Play">
                   <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
                 </button>
@@ -178,13 +177,13 @@
             </div>
           </div>
 
-          <div class="video-gallery-thumbs">
+          <div class="video-gallery-thumbs video-gallery-thumbs--3">
             <button class="video-gallery-thumb active"
               data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
-              data-poster=""
+              data-poster="https://picsum.photos/seed/gallery1/960/540"
               data-caption="Oceans">
               <div class="video-gallery-thumb-img">
-                <img src="" alt="Oceans" loading="lazy">
+                <img src="https://picsum.photos/seed/gallery1/320/180" alt="Oceans" loading="lazy">
                 <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
                 <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
               </div>
@@ -192,27 +191,27 @@
             </button>
 
             <button class="video-gallery-thumb"
-              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
-              data-poster=""
-              data-caption="Sample Two">
+              data-video-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              data-poster="https://picsum.photos/seed/gallery2/960/540"
+              data-caption="Big Buck Bunny">
               <div class="video-gallery-thumb-img">
-                <img src="" alt="Sample Two" loading="lazy">
+                <img src="https://picsum.photos/seed/gallery2/320/180" alt="Big Buck Bunny" loading="lazy">
                 <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
                 <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
               </div>
-              <span class="video-gallery-thumb-caption">Sample Two</span>
+              <span class="video-gallery-thumb-caption">Big Buck Bunny</span>
             </button>
 
             <button class="video-gallery-thumb"
-              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
-              data-poster=""
-              data-caption="Sample Three">
+              data-video-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+              data-poster="https://picsum.photos/seed/gallery3/960/540"
+              data-caption="Elephants Dream">
               <div class="video-gallery-thumb-img">
-                <img src="" alt="Sample Three" loading="lazy">
+                <img src="https://picsum.photos/seed/gallery3/320/180" alt="Elephants Dream" loading="lazy">
                 <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
                 <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
               </div>
-              <span class="video-gallery-thumb-caption">Sample Three</span>
+              <span class="video-gallery-thumb-caption">Elephants Dream</span>
             </button>
           </div>
         </div>
@@ -624,8 +623,9 @@
           thumb.addEventListener('click', () => {
             const videoUrl = thumb.dataset.videoUrl;
             const posterUrl = thumb.dataset.poster;
+            const videoType = videoUrl.endsWith('.m3u8') ? 'application/x-mpegURL' : 'video/mp4';
 
-            player.src({ src: videoUrl, type: 'application/x-mpegURL' });
+            player.src({ src: videoUrl, type: videoType });
 
             if (poster) {
               poster.style.backgroundImage = `url('${posterUrl}')`;
