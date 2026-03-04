@@ -4,10 +4,12 @@
   "private": true,
   "description": "Password-protected slideshow with scroll-snap and video.js",
   "scripts": {
+    "dev": "vite",
     "build": "node build.js",
     "build:secure": "node secure_build.js"
   },
   "devDependencies": {
-    "staticrypt": "^4.0.0"
+    "staticrypt": "^3.5.4",
+    "vite": "^6.2.0"
   }
 }

@@ -13,7 +13,8 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const SOURCE = 'slideshow.html';
+const COMPOSED = path.join('.composed', 'slideshow.html');
+const SOURCE = COMPOSED;
 const SIGNED = '_signed.html';
 const TEMPLATE = 'password_template.html';
 const TITLE = 'Presentation';
@@ -84,6 +85,10 @@ function copyDir(src, dest) {
 
 async function main() {
   console.log('=== Secure Build ===\n');
+
+  // Compose partials into single HTML
+  console.log('Composing slides...');
+  execSync('node compose.js', { stdio: 'inherit', shell: true });
 
   if (!fs.existsSync(SOURCE)) {
     console.error(`Error: ${SOURCE} not found.`);
@@ -156,8 +161,6 @@ async function main() {
   fs.copyFileSync(TEMPLATE, path.join(outputDir, TEMPLATE));
   copyDir('fonts', path.join(outputDir, 'fonts'));
   copyDir('images', path.join(outputDir, 'images'));
-  copyDir('slides', path.join(outputDir, 'slides'));
-
   // Cleanup
   if (fs.existsSync(SIGNED)) fs.unlinkSync(SIGNED);
 

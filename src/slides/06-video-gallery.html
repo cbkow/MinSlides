@@ -1,0 +1,79 @@
+    <!-- SLIDE 6 — Video Gallery -->
+    <section class="slide">
+      <!--
+        Video Gallery: a main player with a thumbnail strip below.
+        Clicking a thumbnail switches the video source.
+
+        Each thumbnail button needs:
+          data-video-url  — HLS or mp4 URL
+          data-poster     — poster image URL
+          data-caption    — display label
+
+        The first thumbnail should have class="active".
+      -->
+      <div class="slide-content" style="display:flex; flex-direction:column; align-items:center; gap:1.5rem;">
+        <div class="slide-label" style="text-align:center;">Video Gallery</div>
+
+        <div class="video-gallery">
+          <div class="video-gallery-player">
+            <div class="video-mount">
+              <div class="video-poster" style="background-image: url('https://picsum.photos/seed/gallery1/960/540');">
+                <button class="video-poster-play" aria-label="Play">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+                </button>
+              </div>
+              <video
+                id="player-gallery"
+                class="video-js vjs-fluid"
+                controls
+                preload="auto">
+                <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div class="video-gallery-thumbs video-gallery-thumbs--3">
+            <button class="video-gallery-thumb active"
+              data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
+              data-poster="https://picsum.photos/seed/gallery1/960/540"
+              data-caption="Oceans">
+              <div class="video-gallery-thumb-img">
+                <img src="https://picsum.photos/seed/gallery1/320/180" alt="Oceans" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Oceans</span>
+            </button>
+
+            <button class="video-gallery-thumb"
+              data-video-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              data-poster="https://picsum.photos/seed/gallery2/960/540"
+              data-caption="Big Buck Bunny">
+              <div class="video-gallery-thumb-img">
+                <img src="https://picsum.photos/seed/gallery2/320/180" alt="Big Buck Bunny" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Big Buck Bunny</span>
+            </button>
+
+            <button class="video-gallery-thumb"
+              data-video-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+              data-poster="https://picsum.photos/seed/gallery3/960/540"
+              data-caption="Elephants Dream">
+              <div class="video-gallery-thumb-img">
+                <img src="https://picsum.photos/seed/gallery3/320/180" alt="Elephants Dream" loading="lazy">
+                <svg class="video-gallery-thumb-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg class="video-gallery-thumb-active" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+              </div>
+              <span class="video-gallery-thumb-caption">Elephants Dream</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="slide-body" style="text-align:center;">
+          Replace the URLs and posters with your own videos.
+          Clicking a thumbnail switches the main player.
+        </p>
+      </div>
+    </section>

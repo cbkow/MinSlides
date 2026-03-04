@@ -1,0 +1,41 @@
+    <!-- SLIDE 2 — Video slide with custom poster -->
+    <section class="slide slide--tint">
+      <!-- <img class="slide-bg" src="slides/slide-02.svg" alt=""> -->
+
+      <div class="slide-content" style="display:flex; flex-direction:column; align-items:center; gap:2rem;">
+        <div class="slide-label">Featured Video</div>
+
+        <!--
+          VIDEO MOUNT with custom poster + sprite thumbnails.
+
+          Custom poster: add a .video-poster div with a background-image.
+          It overlays the player until the user clicks play, then hides.
+
+          Sprite thumbnails: provide explicit paths to each file.
+            data-thumb-sprite  — URL to the sprite sheet JPG
+            data-thumb-config  — URL to the JSON config (width, height, columns, rows, interval)
+            If no config JSON is provided, defaults to 160×90, 10 cols, 17 rows, 1s interval.
+
+          For HLS streaming, swap the source to:
+            <source src="https://your-cdn.com/manifest.m3u8" type="application/x-mpegURL">
+        -->
+        <div class="video-mount">
+          <div class="video-poster" style="background-image: url('https://picsum.photos/seed/poster/960/540');">
+            <button class="video-poster-play" aria-label="Play">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+            </button>
+          </div>
+          <video
+            id="player-1"
+            class="video-js vjs-fluid"
+            controls
+            preload="auto">
+            <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <p class="slide-body" style="text-align:center;">
+          Custom poster overlay, sprite thumbnail previews, and HLS quality selector.
+        </p>
+      </div>
+    </section>

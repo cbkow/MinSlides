@@ -9,7 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const SOURCE = 'slideshow.html';
+const COMPOSED = path.join('.composed', 'slideshow.html');
+const SOURCE = COMPOSED;
 const TEMPLATE = 'password_template.html';
 const TITLE = 'Presentation';
 const INSTRUCTIONS = 'Enter the password to view this presentation.';
@@ -78,6 +79,10 @@ function copyDir(src, dest) {
 }
 
 async function main() {
+  // Compose partials into single HTML
+  console.log('Composing slides...');
+  execSync('node compose.js', { stdio: 'inherit', shell: true });
+
   // Check source
   if (!fs.existsSync(SOURCE)) {
     console.error(`Error: ${SOURCE} not found.`);
@@ -128,8 +133,6 @@ async function main() {
   fs.copyFileSync(TEMPLATE, path.join(outputDir, TEMPLATE));
   copyDir('fonts', path.join(outputDir, 'fonts'));
   copyDir('images', path.join(outputDir, 'images'));
-  copyDir('slides', path.join(outputDir, 'slides'));
-
   console.log(`\nDone. Deployable package: ${outputDir}/`);
   console.log('');
   fs.readdirSync(outputDir).forEach(f => console.log(`  ${f}`));
