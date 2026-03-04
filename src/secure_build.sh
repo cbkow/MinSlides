@@ -13,12 +13,20 @@
 
 set -e
 
-SOURCE="slideshow.html"
 SIGNED="_signed.html"
 TEMPLATE="password_template.html"
 TITLE="Presentation"
 INSTRUCTIONS="Enter the password to view this presentation."
 COLOR_PRIMARY="rgb(0, 120, 212)"
+
+# ---- Compose + generate thumbnails ----
+echo "Composing slides..."
+node compose.js
+
+echo "Generating thumbnails..."
+node thumbs.js
+
+SOURCE="build/composed/slideshow.html"
 
 # ---- Check source exists ----
 if [ ! -f "$SOURCE" ]; then
@@ -116,9 +124,10 @@ npx staticrypt "$SIGNED" \
   --template-button-label "Open" \
   --remember 30
 
-# StatiCrypt outputs with the input filename — rename to our output name
-if [ -f "$OUTPUT_DIR/$SIGNED" ]; then
-  mv "$OUTPUT_DIR/$SIGNED" "$OUTPUT_DIR/$OUTPUT_NAME"
+# StatiCrypt outputs with the input basename — rename to our output name
+SIGNED_BASE="$(basename "$SIGNED")"
+if [ -f "$OUTPUT_DIR/$SIGNED_BASE" ]; then
+  mv "$OUTPUT_DIR/$SIGNED_BASE" "$OUTPUT_DIR/$OUTPUT_NAME"
 fi
 
 # ---- Step 3: Copy sidecar files ----
@@ -127,7 +136,7 @@ cp styles.css "$OUTPUT_DIR/"
 cp password_template.html "$OUTPUT_DIR/"
 cp -r fonts "$OUTPUT_DIR/"
 cp -r images "$OUTPUT_DIR/"
-[ -d slides ] && cp -r slides "$OUTPUT_DIR/"
+[ -d thumbs ] && cp -r thumbs "$OUTPUT_DIR/"
 
 # ---- Cleanup ----
 rm -f "$SIGNED"

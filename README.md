@@ -18,16 +18,23 @@ Prompts for an output name and password, then produces a deployable package in `
 
 ```
 src/
-├── slideshow.html         ← edit this
+├── index.html             ← main markup + JS engine
+├── slides/                ← slide partials (one per slide)
+│   ├── 01-title.html
+│   ├── 02-video-demo.html
+│   └── ...
 ├── styles.css
-├── password_template.html ← StatiCrypt login page
-├── build.js               ← standard build (encrypt only)
-├── secure_build.js        ← secure build (sign CDN URLs + encrypt)
+├── compose.js             ← resolves partials → single HTML
+├── thumbs.js              ← Puppeteer: auto-generates slide thumbnails
+├── build.js               ← standard build (compose → thumbs → encrypt)
+├── secure_build.js        ← secure build (compose → thumbs → sign → encrypt)
 ├── sign_urls.js           ← Bunny CDN/Stream URL signing
+├── password_template.html ← StatiCrypt login page
 ├── package.json
 ├── fonts/                 ← Aspekta Variable font
 ├── images/
-└── slides/                ← SVG exports, images
+├── build/                 ← composed HTML (generated, gitignored)
+└── thumbs/                ← slide thumbnails (generated, gitignored)
 ```
 
 ## Building
@@ -36,11 +43,11 @@ Both build scripts are cross-platform Node.js — works on Windows, macOS, and L
 
 ### Standard Build (`npm run build`)
 
-Encrypts the slideshow with StatiCrypt (AES-256-CBC). Prompts for output filename and password.
+Composes slide partials into a single HTML file, generates filmstrip thumbnails via Puppeteer, then encrypts with StatiCrypt (AES-256-CBC). Prompts for output filename and password.
 
 ### Secure Build (`npm run build:secure`)
 
-Signs all CDN-hosted URLs with Bunny token authentication, then encrypts. Prompts for Bunny CDN/Stream credentials, URL expiration (e.g. `30d`), and password.
+Same pipeline as standard build, but also signs all CDN-hosted URLs with Bunny token authentication before encrypting. Prompts for Bunny CDN/Stream credentials, URL expiration (e.g. `30d`), and password.
 
 CDN credentials can skip prompts via environment variables:
 
@@ -55,7 +62,13 @@ Signed URLs expire after the specified duration — rebuild before expiration.
 
 ## Slides
 
-Each `<section class="slide" data-slide="N">` inside `.deck` is auto-discovered by the JS engine.
+Each slide is a partial HTML file in `src/slides/`. Add a `data-thumb` attribute for filmstrip thumbnails:
+
+```html
+<section class="slide" data-thumb="thumbs/01-title.webp">
+```
+
+Slides are composed into a single file at build time via `<include>` tags in `index.html`. The JS engine auto-discovers all `<section class="slide">` elements inside `.deck`.
 
 ### Backgrounds
 
@@ -177,9 +190,18 @@ Each thumbnail needs `data-video-url`, `data-poster`, and `data-caption`. The fi
 
 Grid modifiers: `--2`, `--3`, `--4`, `--5` set fixed column counts. Without a modifier, the grid auto-fits with a 120px minimum.
 
+## Navigation
+
+- **Arrow keys / scroll** — move between slides
+- **T key** — toggle the filmstrip thumbnail panel
+- **Filmstrip button** (bottom-left) — click to toggle thumbnails
+- **Nav arrows** (bottom-center) — click to go up/down
+
+Filmstrip thumbnails are auto-generated during build via Puppeteer (1920x1080, WebP). If thumbnails haven't been generated yet (e.g. fresh clone before first build), numbered fallback boxes are shown instead.
+
 ## Theming
 
-Change `--color-accent` in `styles.css` to theme the slideshow (indicator dots, labels, video progress tint, password page button):
+Change `--color-accent` in `styles.css` to theme the slideshow (filmstrip active border, labels, video progress tint, password page button):
 
 ```css
 --color-accent: rgb(0, 120, 212);

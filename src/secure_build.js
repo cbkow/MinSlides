@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const COMPOSED = path.join('.composed', 'slideshow.html');
+const COMPOSED = path.join('build', 'composed', 'slideshow.html');
 const SOURCE = COMPOSED;
 const SIGNED = '_signed.html';
 const TEMPLATE = 'password_template.html';
@@ -90,6 +90,10 @@ async function main() {
   console.log('Composing slides...');
   execSync('node compose.js', { stdio: 'inherit', shell: true });
 
+  // Generate thumbnails
+  console.log('Generating thumbnails...');
+  execSync('node thumbs.js', { stdio: 'inherit', shell: true });
+
   if (!fs.existsSync(SOURCE)) {
     console.error(`Error: ${SOURCE} not found.`);
     process.exit(1);
@@ -148,8 +152,8 @@ async function main() {
     '--remember', '30'
   ].join(' '), { stdio: 'inherit', shell: true });
 
-  // Rename
-  const signedOutput = path.join(outputDir, SIGNED);
+  // Rename (StatiCrypt outputs using the input's basename)
+  const signedOutput = path.join(outputDir, path.basename(SIGNED));
   const finalOutput = path.join(outputDir, outputName);
   if (fs.existsSync(signedOutput)) {
     fs.renameSync(signedOutput, finalOutput);
@@ -161,6 +165,7 @@ async function main() {
   fs.copyFileSync(TEMPLATE, path.join(outputDir, TEMPLATE));
   copyDir('fonts', path.join(outputDir, 'fonts'));
   copyDir('images', path.join(outputDir, 'images'));
+  copyDir('thumbs', path.join(outputDir, 'thumbs'));
   // Cleanup
   if (fs.existsSync(SIGNED)) fs.unlinkSync(SIGNED);
 

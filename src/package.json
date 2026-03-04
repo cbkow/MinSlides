@@ -9,6 +9,7 @@
     "build:secure": "node secure_build.js"
   },
   "devDependencies": {
+    "puppeteer": "^24.0.0",
     "staticrypt": "^3.5.4",
     "vite": "^6.2.0"
   }

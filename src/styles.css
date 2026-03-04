@@ -420,61 +420,131 @@ a:hover {
 }
 
 /* =========================================
-   SLIDE INDICATOR
+   FILMSTRIP TOGGLE BUTTON
    ========================================= */
-.slide-indicator {
+.filmstrip-toggle {
   position: fixed;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.slide-indicator__dot {
-  width: 8px;
-  height: 8px;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 101;
+  background: none;
+  border: 1px solid var(--color-dim);
   border-radius: 50%;
-  background: var(--color-muted);
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  width: 2.25rem;
+  height: 2.25rem;
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease, color 0.2s ease, border-color 0.2s ease, bottom 0.3s ease;
 }
-
-.slide-indicator__dot.is-active {
-  background: var(--color-fg);
-  transform: scale(1.4);
+.filmstrip-toggle:hover {
+  color: var(--color-fg);
+  border-color: var(--color-fg);
+}
+.filmstrip-toggle svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 /* =========================================
-   NAV HINT
+   FILMSTRIP PANEL
    ========================================= */
-.nav-hint {
+.filmstrip {
   position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
   z-index: 100;
-  font-family: var(--font);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: none;
-  color: var(--color-muted);
-  opacity: 1;
-  transition: opacity 0.6s ease;
+  background: rgba(0, 0, 0, 0.92);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
 }
-.nav-hint.is-hidden { opacity: 0; pointer-events: none; }
+.filmstrip::-webkit-scrollbar { display: none; }
+.filmstrip.is-open {
+  transform: translateY(0);
+}
 
-.nav-hint kbd {
-  display: inline-block;
-  padding: 0.15em 0.5em;
-  border: 1px solid var(--color-dim);
-  border-radius: 3px;
-  font-family: inherit;
-  margin: 0 0.15em;
+.filmstrip__item {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 68px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+.filmstrip__item:hover {
+  opacity: 0.85;
+}
+.filmstrip__item.is-active {
+  opacity: 1;
+  border-color: var(--color-accent);
+}
+.filmstrip__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.filmstrip__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-lift);
+  color: var(--color-muted);
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: var(--font);
+}
+
+/* --- Shift UI up when filmstrip is open --- */
+body.filmstrip-open .nav-arrow--down {
+  bottom: calc(1.5rem + 90px);
+}
+body.filmstrip-open .deck-counter {
+  bottom: calc(2rem + 90px);
+}
+body.filmstrip-open .filmstrip-toggle {
+  bottom: calc(2rem + 90px);
+}
+
+@media (max-width: 640px) {
+  .filmstrip {
+    height: 70px;
+  }
+  .filmstrip__item {
+    width: 96px;
+    height: 54px;
+  }
+  body.filmstrip-open .nav-arrow--down {
+    bottom: calc(1.5rem + 70px);
+  }
+  body.filmstrip-open .deck-counter {
+    bottom: calc(2rem + 70px);
+  }
+  body.filmstrip-open .filmstrip-toggle {
+    bottom: calc(2rem + 70px);
+  }
 }
 
 /* =========================================
@@ -506,10 +576,6 @@ a:hover {
 .nav-arrow svg {
   width: 1rem;
   height: 1rem;
-}
-.nav-arrow.is-hidden {
-  opacity: 0;
-  pointer-events: none;
 }
 .nav-arrow.is-hidden-arrow {
   opacity: 0;

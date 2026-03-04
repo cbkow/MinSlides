@@ -6,11 +6,19 @@
 
 set -e
 
-SOURCE="slideshow.html"
 TEMPLATE="password_template.html"
 TITLE="Presentation"
 INSTRUCTIONS="Enter the password to view this presentation."
 COLOR_PRIMARY="rgb(0, 120, 212)"
+
+# ---- Compose + generate thumbnails ----
+echo "Composing slides..."
+node compose.js
+
+echo "Generating thumbnails..."
+node thumbs.js
+
+SOURCE="build/composed/slideshow.html"
 
 # ---- Check source exists ----
 if [ ! -f "$SOURCE" ]; then
@@ -66,9 +74,10 @@ npx staticrypt "$SOURCE" \
   --template-button-label "Open" \
   --remember 30
 
-# StatiCrypt outputs with the source filename — rename to our output name
-if [ "$OUTPUT_NAME" != "$SOURCE" ] && [ -f "$OUTPUT_DIR/$SOURCE" ]; then
-  mv "$OUTPUT_DIR/$SOURCE" "$OUTPUT_DIR/$OUTPUT_NAME"
+# StatiCrypt outputs with the source basename — rename to our output name
+SOURCE_BASE="$(basename "$SOURCE")"
+if [ "$OUTPUT_NAME" != "$SOURCE_BASE" ] && [ -f "$OUTPUT_DIR/$SOURCE_BASE" ]; then
+  mv "$OUTPUT_DIR/$SOURCE_BASE" "$OUTPUT_DIR/$OUTPUT_NAME"
 fi
 
 # ---- Copy sidecar files ----
@@ -77,7 +86,7 @@ cp styles.css "$OUTPUT_DIR/"
 cp password_template.html "$OUTPUT_DIR/"
 cp -r fonts "$OUTPUT_DIR/"
 cp -r images "$OUTPUT_DIR/"
-[ -d slides ] && cp -r slides "$OUTPUT_DIR/"
+[ -d thumbs ] && cp -r thumbs "$OUTPUT_DIR/"
 
 echo ""
 echo "Done. Deployable package: ${OUTPUT_DIR}/"

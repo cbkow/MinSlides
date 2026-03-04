@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
  * compose.js — Resolve <include> tags into a single HTML file.
- * Reads index.html, inlines all partials, writes .composed/slideshow.html.
+ * Reads index.html, inlines all partials, writes build/composed/slideshow.html.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const INPUT = path.resolve(__dirname, 'index.html');
-const OUTPUT_DIR = path.resolve(__dirname, '.composed');
+const OUTPUT_DIR = path.resolve(__dirname, 'build', 'composed');
 const OUTPUT = path.join(OUTPUT_DIR, 'slideshow.html');
 
 let html = fs.readFileSync(INPUT, 'utf-8');
