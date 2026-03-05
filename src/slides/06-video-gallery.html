@@ -1,5 +1,5 @@
     <!-- SLIDE 6 — Video Gallery -->
-    <section class="slide" data-thumb="thumbs/06-video-gallery.webp">
+    <section class="slide slide--wide-content" data-thumb="thumbs/06-video-gallery.webp">
       <!--
         Video Gallery: a main player with a thumbnail strip below.
         Clicking a thumbnail switches the video source.
@@ -11,7 +11,7 @@
 
         The first thumbnail should have class="active".
       -->
-      <div class="slide-content" style="display:flex; flex-direction:column; align-items:center; gap:1.5rem;">
+      <div class="slide-content slide-content--gallery">
         <div class="slide-label" style="text-align:center;">Video Gallery</div>
 
         <div class="video-gallery">
@@ -32,7 +32,7 @@
             </div>
           </div>
 
-          <div class="video-gallery-thumbs video-gallery-thumbs--3">
+          <div class="video-gallery-thumbs">
             <button class="video-gallery-thumb active"
               data-video-url="https://vjs.zencdn.net/v/oceans.mp4"
               data-poster="https://picsum.photos/seed/gallery1/960/540"
