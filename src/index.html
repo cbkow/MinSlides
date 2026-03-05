@@ -79,7 +79,7 @@
       const btn = document.createElement('button');
       btn.className = 'filmstrip__item' + (i === 0 ? ' is-active' : '');
       btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
-      btn.addEventListener('click', () => goToSlide(i));
+      btn.addEventListener('click', () => { showChrome(); goToSlide(i); });
 
       const thumbSrc = slide.dataset.thumb;
       if (thumbSrc) {
@@ -112,6 +112,7 @@
       filmstrip.classList.toggle('is-open', filmstripOpen);
       filmstripToggle.setAttribute('aria-expanded', filmstripOpen);
       document.body.classList.toggle('filmstrip-open', filmstripOpen);
+      showChrome();
     }
 
     filmstripToggle.addEventListener('click', toggleFilmstrip);
@@ -154,10 +155,15 @@
       navDown.classList.toggle('is-hidden-arrow', activeIndex === slides.length - 1);
     }
 
+    // --- Show chrome (no longer auto-hides) ---
+    function showChrome() {}
+
     // --- Keyboard navigation ---
     document.addEventListener('keydown', (e) => {
       // Don't capture keys when user is in an input
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      showChrome();
 
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
@@ -462,6 +468,32 @@
         });
       });
     }
+
+    // ==========================================
+    // AUTO-SCALE OVERFLOWING SLIDE CONTENT
+    // ==========================================
+
+    function fitSlideContent() {
+      slides.forEach(slide => {
+        const content = slide.querySelector('.slide-content');
+        if (!content) return;
+
+        // Reset so we can measure natural size
+        content.style.transform = '';
+
+        const slideH = slide.clientHeight;
+        const contentH = content.scrollHeight;
+        const margin = 48; // safety margin for chrome (title, counter, arrows)
+
+        if (contentH > slideH - margin) {
+          const scale = (slideH - margin) / contentH;
+          content.style.transform = `scale(${scale})`;
+        }
+      });
+    }
+
+    new ResizeObserver(fitSlideContent).observe(deck);
+    fitSlideContent();
 
     // ==========================================
     // INIT

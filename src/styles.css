@@ -35,6 +35,9 @@
 
   --slide-width: 100vw;
   --slide-height: 100vh;
+
+  /* ── Chrome safe area ── top/bottom inset for SVG backgrounds */
+  --chrome-inset-y: 4rem;
 }
 
 html {
@@ -117,9 +120,9 @@ a:hover {
    ========================================= */
 .slide-bg {
   position: absolute;
-  inset: 0;
+  inset: var(--chrome-inset-y, 4rem) 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 2 * var(--chrome-inset-y, 4rem));
   object-fit: contain;
   object-position: center;
   pointer-events: none;
@@ -128,13 +131,15 @@ a:hover {
 
 .slide-bg--cover {
   object-fit: cover;
+  inset: 0;
+  height: 100%;
 }
 
 .slide-bg-inline {
   position: absolute;
-  inset: 0;
+  inset: var(--chrome-inset-y, 4rem) 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 2 * var(--chrome-inset-y, 4rem));
   z-index: 0;
 }
 .slide-bg-inline svg {
@@ -151,6 +156,7 @@ a:hover {
   max-width: 1200px;
   width: 100%;
   padding: 4rem;
+  transform-origin: center center;
 }
 
 .img-fit {
@@ -424,7 +430,7 @@ a:hover {
    ========================================= */
 .filmstrip-toggle {
   position: fixed;
-  bottom: 2rem;
+  bottom: 1.5rem;
   left: 2rem;
   z-index: 101;
   background: none;
@@ -525,7 +531,7 @@ body.filmstrip-open .deck-counter {
   bottom: calc(2rem + 90px);
 }
 body.filmstrip-open .filmstrip-toggle {
-  bottom: calc(2rem + 90px);
+  bottom: calc(1.5rem + 90px);
 }
 
 @media (max-width: 640px) {
@@ -543,9 +549,10 @@ body.filmstrip-open .filmstrip-toggle {
     bottom: calc(2rem + 70px);
   }
   body.filmstrip-open .filmstrip-toggle {
-    bottom: calc(2rem + 70px);
+    bottom: calc(1.5rem + 70px);
   }
 }
+
 
 /* =========================================
    NAV ARROWS
