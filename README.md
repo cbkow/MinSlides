@@ -15,7 +15,7 @@ npm run build      # production build
 
 ### Development
 
-`npm run dev` starts a Vite dev server with slide partial inlining. CSS changes hot-reload automatically. After editing slide HTML files, press `r` + `Enter` in the Vite terminal to reload.
+`npm run dev` starts a Vite dev server with slide partial inlining. File watching and HMR are disabled to avoid refresh loops on file-syncing services (Dropbox, OneDrive, etc.). Refresh the browser manually to see changes.
 
 ### Production
 

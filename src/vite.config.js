@@ -18,5 +18,9 @@ const includePlugin = () => ({
 });
 
 export default defineConfig({
-  plugins: [includePlugin()]
+  plugins: [includePlugin()],
+  server: {
+    watch: null,
+    hmr: false
+  }
 });
