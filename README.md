@@ -9,10 +9,17 @@ Password-protected slideshow with scroll-snap navigation, Video.js streaming, an
 ```bash
 cd src
 npm install
-npm run build
+npm run dev        # local dev server
+npm run build      # production build
 ```
 
-Prompts for an output name and password, then produces a deployable package in `dist/`.
+### Development
+
+`npm run dev` starts a Vite dev server with slide partial inlining. CSS changes hot-reload automatically. After editing slide HTML files, press `r` + `Enter` in the Vite terminal to reload.
+
+### Production
+
+`npm run build` prompts for an output name and password, then produces a deployable package in `dist/`.
 
 ## Project Structure
 
